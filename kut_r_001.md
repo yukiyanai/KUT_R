@@ -18,7 +18,7 @@
 	- 資料2: [Rスクリプト](Rscripts/yanai_kutR_001.R)
 	- 参考：[RStudio Cloudのプロジェクト](https://rstudio.cloud/project/762403)
 1. 「Rによるデータの可視化：ggplot2入門」[矢内 勇生](https://github.com/yukiyanai)
-	- 資料1: スライド
+	- 資料1: [スライド (PDF)](slides/yanai_kutR_001_ggplot.pdf)
 	- 資料2: [R Markdownファイル](RMarkdowns/yanai_kutR_001.Rmd)
 	- 資料3: [資料2をHTMLにまとめたもの](http://htmlpreview.github.com/?https://github.com/yukiyanai/KUT_R/blob/master/htmls/yanai_kutR_001.html)
 	- 参考：[RStudio Cloudのプロジェクト](https://rstudio.cloud/project/762403)
