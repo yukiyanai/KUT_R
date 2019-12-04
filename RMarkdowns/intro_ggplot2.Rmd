@@ -345,11 +345,13 @@ plot(p7_2)
 
 <br>
 <br>
-Enjoy!
+
+## Enjoy!
+
 <br>
 <br>
 <div style="text-align: right;">
-[戻る](https://github.com/yukiyanai/KUT_R)
+[戻る](https://github.com/yukiyanai/KUT_R/blob/master/kut_r_001.md)
 </div>
 
 
