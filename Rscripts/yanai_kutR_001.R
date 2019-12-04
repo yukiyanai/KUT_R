@@ -238,8 +238,8 @@ min(myd_new$life_f)
 ## @kazutan が書いてくれた tubeplayR (https://github.com/kazutan/tubeplayR) 
 # #のコードを使う（ただし、Macでしか動かない）。
 if(!require("devtools")) install.packages("devtools")
-#if (!require("tubeplayR")) devtools::install_github("kazutan/tubeplayR")
-#library("tubeplaryR")
+if (!require("tubeplayR")) devtools::install_github("kazutan/tubeplayR")
+library("tubeplaryR")
 
 ## 再生したiい動画のURLを指定して再生
 tubeplay(url = "https://www.youtube.com/watch?v=jl747tReEX0")
