@@ -1,6 +1,7 @@
-<img src="logo/kut-R_logo.png" width="50%">
+<img src="logo/kutR_logo.png" width="30%">
 
-R勉強会 @[高知工科大学](https://www.kochi-tech.ac.jp/) (Kochi University of Technology; KUT) 
+R勉強会 @[高知工科大学](https://www.kochi-tech.ac.jp/) (Kochi University of Technology; KUT), 経済・マネジメント学群
+
 
 
 

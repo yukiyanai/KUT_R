@@ -1,4 +1,4 @@
-<img src="logo/kut-R_logo.png" width="50%">
+<img src="logo/kut-R_logo.png" width="30%">
 
 # 第1回 KUT.R
 
