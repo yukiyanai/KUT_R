@@ -1,4 +1,4 @@
-## intro2R.R
+## yanai_kutR_001.R
 ##
 ## Demonstrate how to use R for KUT.R #1
 ## 2019-12-05 Yuki Yanai
