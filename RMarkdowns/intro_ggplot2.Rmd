@@ -1,0 +1,355 @@
+---
+title: "Rによるデータ可視化：ggplot2 入門"
+subtitle: "第1回 KUT.R"
+author: "矢内　勇生"
+date: "2019-12-05"
+output:
+    html_document:
+        theme: united
+        highlight: tango
+        toc: yes
+        self_contained: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, cache = TRUE,
+                      fig.width = 6, fig.height = 4)
+```
+
+
+## 事前準備
+
+*tidyverse* パッケージがインストール済みでない場合は、インストールする。
+```{r, eval = FALSE}
+install.packages("tidyverse", dependencies = TRUE)
+```
+
+
+（インストールが済んだら）`library()` で読み込む。
+```{r}
+library("tidyverse")
+```
+
+**Macユーザのみ**、以下のコードを実行する。
+```{r}
+theme_set(theme_gray(base_size = 10, 
+                     base_family = "HiraginoSans-W3"))
+```
+
+
+## 作図に使うデータの用意
+
+### ファイルを読み込む
+
+プロジェクト内の**data** ディレクトリにある **longevity_pref.csv** というデータを、`readr::read_csv()` で読み込む。（**注意：**この名前のCSVファイルを、自分が現在Rを操作しているディレクトリ [`getwd()` で確認できる] 内の "data" という名前のディレクトリの中に事前に用意しない限り、読み込めない。）
+```{r}
+longevity <- read_csv("data/longevity_pref.csv")
+```
+
+`tibble::glimpse()` でデータを確認。
+
+```{r}
+glimpse(longevity)
+```
+
+data.frame型かどうか、`class()` で確認。
+```{r}
+class(longevity)
+```
+data.frame **も** あることが確認できる（その他についてはまたの機会に）。
+
+
+### 自分で用意するとき
+
+```{r}
+n <- 100
+x_vec <- runif(n, min = 0, max = 1)
+y_vec <- rnorm(n, mean = 0.8 * x_vec, sd = 1)
+myd <- tibble(x = x_vec,
+              y = y_vec)
+glimpse(myd)
+class(myd)
+```
+
+### 組み込みデータを利用
+
+**mtcars**データを使う。
+```{r}
+data(mtcars)
+glimpse(mtcars)
+class(mtcars)
+```
+このデータの詳細を確認したければ、次のコマンドで。
+```{r, eval = FALSE}
+?mtcars
+```
+
+
+他にどんなデータが利用可能か確認したければ、以下を実行。
+```{r, eval = FALSE}
+data()
+```
+
+
+## ggplot2 の基本操作
+
+1. 作図対象となるデータを `ggplot()` に入力する
+    - data: データを指定
+    - mapping: どの変数を図のどこで利用するか指定
+2. `geom_xxx()` で図の層を加える（xxx の部分はグラフの種類によって変わる）
+3. ラベル (label) や凡例 (legend) の指定、作図範囲の絞り込み、軸の交換などを行う
+4. `plot()` で図を表示する
+
+
+
+### 例1：散布図
+
+**mtcars** は自動車に関するデータである。例として、燃費 (mile per gallon; mpg) と車の重量 (weight; wt) の関係を散布図にしてみよう。
+
+1. 作図対象となるデータを入力。散布図の横軸に wt、縦軸に mpg を指定する
+```{r}
+p1_1 <- ggplot(data = mtcars, 
+               mapping = aes(x = wt, y = mpg)) 
+```
+
+この時点で図を表示してみる。
+```{r}
+plot(p1_1)
+```
+
+指定した通り、横軸にwt、縦軸にmpgをとった図を描く準備ができているが、グラフ自体はまだない。
+
+ここに、散布図を作るための層 (layer) を加える。散布図は、`geom_point()` でできる。
+```{r}
+p1_2 <- p1_1 + geom_point()
+```
+このように、前に作ったものに層を順次を加えることができる。この時点で表示してみる。
+```{r}
+plot(p1_2)
+```
+
+散布図自体はできている。
+
+次に、ラベルをわかりやすいものに変える。`labs()` で変更できる。（**注意：** RStudio Cloud を使っている場合は日本語不可。）
+```{r}
+p1_3 <- p1_2 + labs(x = "重量 (1000 lbs)", y = "燃費 (Miles / US gallon)")
+```
+
+表示してみる。
+```{r}
+plot(p1_3)
+```
+
+これで散布図ができた。
+
+慣れてきたら、一度にコマンドを書いてもよい。
+```{r}
+p1 <- ggplot(mtcars, aes(x = wt, y = mpg)) +
+    geom_point() +
+    labs(x = "重量 (1000 lbs)", y = "燃費 (Miles / US gallon)")
+plot(p1)
+```
+
+
+### 例2：ヒストグラム
+
+
+引き続き **mtcars** を使う。燃費 (mile per gallon; mpg) のヒストグラムを作ってみよう。
+
+1. 作図対象となるデータを入力。ヒストグラムは1つの変数を可視化するグラフなので、**aes** にはxのみ指定する。
+```{r}
+p2_1 <- ggplot(mtcars, aes(x = mpg)) 
+```
+
+この時点で図を表示してみる。
+```{r}
+plot(p2_1)
+```
+
+指定した通り、横軸にmpgをとった図を描く準備ができているが、グラフ自体はまだない。また、縦軸は指定していないので何もない。
+
+ここに、ヒストグラムを作るための層 (layer) を加える。ヒストグラムは、`geom_histogram()` でできる。
+```{r}
+p2_2 <- p2_1 + geom_histogram()
+```
+この時点で表示してみる。
+```{r}
+plot(p2_2)
+```
+
+ヒストグラム自体はできている。しかし、ビン（ヒストグラムの一つひとつの棒）の幅が狭すぎるので、**binwidth** で調整する。
+```{r}
+p2_3 <- p2_1 + geom_histogram(binwidth = 2.5)
+plot(p2_3)
+```
+
+ビンの区切りがちょうどいい位置にないので、**boundary** でビンの境界をどの位置に置きたいかを指定する。今回はビンの幅が2.5 なので、境界線が$5, 7.5, 10, \dots$ になるように 5 を指定する。
+```{r}
+p2_4 <- p2_1 + geom_histogram(binwidth = 2.5, boundary = 5)
+plot(p2_4)
+```
+
+ビンの境が見えにくいので、ビンの縁に黒色をつける。
+```{r}
+p2_5 <- p2_1 + geom_histogram(binwidth = 2.5, boundary = 5, color = "black")
+plot(p2_5)
+```
+
+次に、ラベルをわかりやすいものに変える。（**注意：** RStudio Cloud を使っている場合は日本語不可。）
+```{r}
+p2_6 <- p2_5 + labs(x = "燃費 (Miles / US gallon)", y = "度数")
+plot(p2_6)
+```
+
+これで縦軸が度数 (count, frequency) のヒストグラムができた。
+
+ヒストグラムの縦軸を確率密度 (probability density) に変えたいときは、`aes()` で `y = ..density..` を指定する（"density" の前後にドットが2つずつ必要）。ついでに、ビンの色をドジャーブルーに変えてみる（必要ではない。来年こそは World Champion を...）。
+```{r}
+p2_dens <- ggplot(mtcars, aes(x = mpg, y = ..density..)) +
+    geom_histogram(binwidth = 2.5, boundary = 5, 
+                   color = "black", fill = "dodgerblue") +
+    labs(x = "燃費 (Miles / US gallon)", y = "確率密度")
+plot(p2_dens)    
+```
+
+
+### 例3：箱ひげ図
+
+ダイヤモンドのデータ **diamonds** を使う。
+```{r}
+data(diamonds)
+glimpse(diamonds)
+class(diamonds)
+```
+詳細については、`?diamonds` で確認できる。
+
+ダイヤモンドのカットの質 (cut) ごとの 深さ (depth) のばらつきを可視化するため、箱ひげ図 (box[-and-whisker] plot) を作ってみよう。
+
+まず、データとマッピングを指定する。
+```{r}
+p3_1 <- ggplot(diamonds, aes(x = cut, y = depth))
+plot(p3_1)
+```
+
+指定通り、横軸に cut、縦軸に depth を可視化する準備ができている。
+
+次に、`geom_boxplot()` で箱ひげ図の層を加える。
+```{r}
+p3_2 <- p3_1 + geom_boxplot() 
+plot(p3_2)
+```
+
+軸ラベルを日本語にする (RStudio Cloud 以外)。
+```{r}
+p3_3 <- p3_2 + labs(x = "カット", y = "深さ")
+plot(p3_3)
+```
+
+
+
+## 少しだけ応用的な使い方
+
+### 他の変数の値で観測を区別する (1)：色と形による区別
+
+自動車の燃費と重量の散布図をもう一度考える。先ほど、以下の図を作った。
+```{r}
+plot(p1)
+```
+
+mtcars データには、気筒数 (cyl) という変数もある。気筒数は、燃費や重量に関係しているだろうか。
+この散布図の点を、気筒数によって区別してみよう。
+
+まずは、`aes()` の **color** で色分けしてみる。
+```{r}
+p4_1 <- ggplot(mtcars, aes(x = wt, y = mpg, color = cyl)) +
+    geom_point() +
+    labs(x = "重量 (1000 lbs)", y = "燃費 (Miles / US gallon)")
+plot(p4_1)
+```
+
+気筒数 (cyl) が4から8に増えるにつれて、点の青色が少しずつ淡くなる散布図ができた。しかし、気筒数は、4から8まで少しずつ増えたりしない。気筒数は整数値しかとらない。
+
+気筒数を`table()` で表にしてみる。
+```{r}
+table(mtcars$cyl)
+```
+
+気筒数は、4, 6, 8 の3種類しかない。つまり、気筒数はカテゴリ変数（順序尺度）である。カテゴリ変数が連続量であるかのように誤解されている場合、`factor()` を使えばカテゴリ変数として作図できる。次のようにする。
+```{r}
+p4_2 <- ggplot(mtcars, aes(x = wt, y = mpg, color = factor(cyl))) +
+    geom_point() +
+    labs(x = "重量 (1000 lbs)", y = "燃費 (Miles / US gallon)")
+plot(p4_2)
+```
+
+気筒数による色分けができた。しかし、色のチョイスがあまり良くない。特に、赤と緑を区別できない人がいると思われるので、`scale_color_brewer()` で色使い (color paletter) を **Accent** に変え、色分けの凡例 (legend) につけるラベルを **name** で指定する。指定できるパレットについては、[このページ](http://www.sthda.com/english/wiki/colors-in-r) を参照。
+```{r}
+p4_3 <- p4_2 + scale_color_brewer(palette = "Accent", name = "気筒数")
+plot(p4_3)
+```
+
+これで一応できた。
+
+次に、色分けの代わりに**shape** で点の形を区別してみる。
+```{r}
+p5_1 <- ggplot(mtcars, aes(x = wt, y = mpg, shape = factor(cyl))) +
+    geom_point() +
+    labs(x = "重量 (1000 lbs)", y = "燃費 (Miles / US gallon)")
+plot(p5_1)
+```
+
+点の形で気筒するを区別することができた。形分けの凡例 (legend) につけるラベルを`scale_shape_discrete()` の **name** で指定する。
+```{r}
+p5_2 <- p5_1 + scale_shape_discrete(name = "気筒数")
+plot(p5_2)
+```
+
+最後に、色分けと形分けを同時にやってみよう。
+```{r}
+p6 <- ggplot(mtcars, aes(x = wt, y = mpg,
+                         color = factor(cyl), shape = factor(cyl))) +
+    geom_point() +
+    labs(x = "重量 (1000 lbs)", y = "燃費 (Miles / US gallon)") +
+    scale_color_brewer(palette = "Accent", name = "気筒数") +
+    scale_shape_discrete(name = "気筒数")
+plot(p6)
+```
+
+凡例の位置を変えたいとき、例えば、グラフの下に凡例を置きたいときは、次のようにする。
+```{r}
+p6_btm <- p6 + theme(legend.position = "bottom")
+plot(p6_btm)
+```
+
+
+### 他の変数の値で観測を区別する (2)：facetの利用
+
+もう一度 diamonds データについて考える。depth の分布はどうなっているだろうか。ヒストグラムで可視化してみよう。
+```{r}
+p7_1 <- ggplot(diamonds, aes(x = depth, y = ..density..)) +
+    geom_histogram(color = "black") +
+    labs(x = "深さ", y = "確率密度")
+plot(p7_1)
+```
+
+これは、すべての観測を一緒くたに扱った場合の深さの分布である。カットの質 (cut) ごとに分布は異なるのではないだろうか?（上で箱ひげ図を作ったので知っている。） カットの質別にヒストグラムを作ることによって可視化してみよう。`facet_wrap()` を以下のように使う。
+```{r}
+p7_2 <- p7_1 + facet_wrap(. ~ cut)
+plot(p7_2)
+```
+
+質が高くなるほど、ばらつきが小さくなっていることがわかる。
+
+
+`ggplot()` を使えば、他にも様々な種類の綺麗なグラフを簡単に作ることができる。
+
+<br>
+<br>
+Enjoy!
+<br>
+<br>
+<div style="text-align: right;">
+[戻る](https://github.com/yukiyanai/KUT_R)
+</div>
+
+

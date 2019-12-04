@@ -19,8 +19,8 @@
 	- 参考：[RStudio Cloudのプロジェクト](https://rstudio.cloud/project/762403)
 1. 「Rによるデータの可視化：ggplot2入門」[矢内 勇生](https://github.com/yukiyanai)
 	- 資料1: スライド
-	- 資料2: R Markdownファイル
-	- 資料3: 資料2をHTMLにまとめたもの
+	- 資料2: [R Markdownファイル](RMarkdowns/intro_ggplot2.Rmd)
+	- 資料3: [資料2をHTMLにまとめたもの](http://htmlpreview.github.com/?https://github.com/yukiyanai/KUT_R/blob/master/htmls/intro_ggplot2.html)
 	- 参考：[RStudio Cloudのプロジェクト](https://rstudio.cloud/project/762403)
 1. 「R初心者によるR (ggplot2) を使った作図例」清水直樹
 
