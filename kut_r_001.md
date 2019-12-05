@@ -23,6 +23,7 @@
 	- 資料3: [資料2をHTMLにまとめたもの](http://htmlpreview.github.com/?https://github.com/yukiyanai/KUT_R/blob/master/htmls/yanai_kutR_001.html)
 	- 参考：[RStudio Cloudのプロジェクト](https://rstudio.cloud/project/762403)
 1. 「R初心者によるR (ggplot2) を使った作図例」清水直樹
+	- 資料: [スライド (PDF)](slides/shimizu_kutR_001.pdf)
 
 ### 応用セッション
 
