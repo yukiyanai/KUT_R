@@ -28,7 +28,7 @@
 ### 応用セッション
 
 1. 「Rでゲーム理論分析：集団間競争ゲームを例として」上條 良夫
-	- 資料は後日公開予定 
+	- 資料: [スライド (PDF)](slides/kamijo_kutR_001.pdf)
 2. 「lavaanパッケージの紹介：構造方程式モデリングや媒介分析」[日道 俊之](https://sites.google.com/site/toshiyukihimichi/home)
 	- 資料1: [スライド (PDF)](slides/himichi_kutR_001.pdf)
 	- 資料2: [Rスクリプト](Rscripts/himichi_kutR_001.R)
